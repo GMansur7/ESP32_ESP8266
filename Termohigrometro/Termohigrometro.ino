@@ -89,9 +89,10 @@ void loop() {
   float hic = dht.computeHeatIndex(t, h, false);
 
   Serial.print(F("Humidity: "));
-  Serial.print(h);
+  Serial.print(hif);
   Serial.print(F("%  Temperature: "));
-  Serial.println(t);
+  //Serial.println(t);
+  Serial.println(hic); //Maior resolução e mais lento
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*  
   // put your main code here, to run repeatedly:
@@ -108,11 +109,13 @@ void loop() {
   display.print(F("Termo-higrometro"));
   display.setCursor(0,16);
   display.print(F("Humidity:    "));
-  display.print(h);
+  display.print(hif); //Maior resolução e mais lento
+  //display.print(h); //Menor resolução e mais rápido
   display.print(F(" %"));
   display.setCursor(0,24);
   display.print(F("Temperature: "));
-  display.print(t);
+  display.print(hic); //Maior resolução e mais lento
+  //display.print(t); //Menor resolução e mais rápido
   display.print(F(" C"));
   display.display();
 //  delay(100);
