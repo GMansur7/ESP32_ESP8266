@@ -1,9 +1,5 @@
-#include <Adafruit_CircuitPlayground.h>
-#include <Adafruit_Circuit_Playground.h>
 
-
-
-int freq = 50;
+int freq = 100;
 int ledCh = 0;
 int resolution = 8; // 0 to 255 steps
 int dutyCycle = 21;
@@ -16,9 +12,8 @@ void setup() {
   Serial.println("Testing PWM");
   
 ledcSetup (ledCh, freq, resolution);
-ledcAttachPin (17, ledCh);
+ledcAttachPin (19, ledCh);
 ledcWrite (ledCh, dutyCycle);
-
 
 }
 
@@ -27,8 +22,9 @@ void loop() {
 ledcWrite (ledCh, dutyCycle);
 analogValue = analogRead(4);
 
-dutyCycle = map(analogValue, 0, 4095, 8, 33);
+dutyCycle = map(analogValue, 0, 4095, 0, 255);
+//freq = map(analogValue, 0, 4095, 0, 255);
 Serial.println(analogValue/40.95);
-//dutyCycle = analogValue/40.95;
+
 delay(50);
 }
