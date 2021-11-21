@@ -15,7 +15,6 @@
 //#define TINY_GSM_RX_BUFFER 256
 
 //***********************************************************************
-//#include <TinyGPS++.h> //https://github.com/mikalhart/TinyGPSPlus
 #include <TinyGsmClient.h> //https://github.com/vshymanskyy/TinyGSM
 #include <ArduinoHttpClient.h> //https://github.com/arduino-libraries/ArduinoHttpClient
 //***********************************************************************
