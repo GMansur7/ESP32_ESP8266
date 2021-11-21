@@ -1,9 +1,10 @@
 
-/* Programa de envio de dados ao Firebase via HTTP com rede GPRS (Telefonia móvel)
+/* 
+ * Título: Envio e leitura de dados do Firebase via HTTP com rede GPRS (Telefonia móvel)
  * 
  * link do tutorial: https://github.com/vshymanskyy/TinyGSM
  * 
- * Autor: Gustavo Mansur de Oliveira ( E-mail: gustavo.mansuroliveira@gmail.com)
+ * Autor: Gustavo Mansur de Oliveira (E-mail: gustavo.mansuroliveira@gmail.com)
  * 
  */
 
@@ -20,11 +21,11 @@
 //***********************************************************************
 
 //***********************************************************************
-const char FIREBASE_HOST[]  = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx.firebaseio.com";
-const String FIREBASE_AUTH  = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-//const String FIREBASE_PATH  = "dados/coordenadas";
+const char FIREBASE_HOST[]  = "lilygo-esp32-sim800l-xxxxxxxxx.firebaseio.com";
+const String FIREBASE_AUTH  = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+//const String FIREBASE_PATH  = "dados/coordenadas";//exemplo para caminhos diferentes dentro da tabela de dados do servidor Firebase
 const String FIREBASE_PATH  = "/";
-const int SSL_PORT          = 443;
+const int SSL_PORT          = 443;//Proteção e criptografia HTTPS
 //***********************************************************************
 
 //***********************************************************************
@@ -151,6 +152,10 @@ void loop() {
 void PostToFirebase(const char* method, const String & path , const String & data, HttpClient* http) {
   String response;
   int statusCode = 0;
+  //MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+  String get_response;
+  String Data_respounce;
+  //MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
   http->connectionKeepAlive(); // Currently, this is needed for HTTPS
   
   //***********************************************************************
@@ -164,7 +169,9 @@ void PostToFirebase(const char* method, const String & path , const String & dat
   Serial.println(url);
   Serial.print("Data:");
   Serial.println(data);
+  
   //***********************************************************************
+  //PUT command (Enviando dados estruturados em formato de String)
   
   String contentType = "application/json";
   http->put(url, contentType, data);
@@ -179,7 +186,7 @@ void PostToFirebase(const char* method, const String & path , const String & dat
   digitalWrite(LED, LOW);
   
   //***********************************************************************
-  // read the status code and body of the response
+  //read the status code and body of the response
   //statusCode-200 (OK) | statusCode -3 (TimeOut)
   statusCode = http->responseStatusCode();
   Serial.print("Status code: ");
@@ -188,6 +195,33 @@ void PostToFirebase(const char* method, const String & path , const String & dat
   Serial.print("Response: ");
   Serial.println(response);
   //***********************************************************************
+  
+//MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+  //GET command (Recebendo dados estruturados em formato de String)
+
+  //String contentType = "application/json";
+  //http->put(url, contentType, data);
+  //get_response = http->get(resource);
+  get_response = http->get(url);//Connect to the server and start to send a POST request.
+                                //@param aURLPath     Url to request
+  Serial.print("return 0 if successful, else error: ");
+  Serial.println(get_response);//@return 0 if successful, else error
+  
+//Pisca LED pino 13 quando recebe os dados
+  digitalWrite(LED, HIGH);
+  delay(500);
+  digitalWrite(LED, LOW);
+  
+  //***********************************************************************
+  //read the status code and body of the response
+  //statusCode-200 (OK) | statusCode -3 (TimeOut)
+  statusCode = http->responseStatusCode();
+  Serial.print("Status code: ");
+  Serial.println(statusCode);
+  Data_respounce = http->responseBody();// Dado lido do servidor
+  Serial.print("Response of GET: ");
+  Serial.println(Data_respounce);
+//MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 
   //***********************************************************************
   if (!http->connected()) {
@@ -200,11 +234,11 @@ void PostToFirebase(const char* method, const String & path , const String & dat
 
 //*************************************************************************
 
-void acquisition_loop()
+void acquisition_loop()//formatando os dados para envio
 {
-
+  //Exemplo de dados
   String latitude = "47.2";
-  String longitude = "46.4";
+  String longitude = "46.9";
   
   //Exemplos de formatação de dados
   //float altitude;
