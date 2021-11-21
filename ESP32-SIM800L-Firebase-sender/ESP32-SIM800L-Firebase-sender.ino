@@ -3,7 +3,7 @@
 #define TINY_GSM_MODEM_SIM800
 
 //Increase RX buffer
-//#define TINY_GSM_RX_BUFFER 256
+//#define TINY_GSM_RX_BUFFER 256 
 
 //NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 //#include <TinyGPS++.h> //https://github.com/mikalhart/TinyGPSPlus
@@ -12,8 +12,8 @@
 //NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 
 //NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-const char FIREBASE_HOST[]  = "lilygo-xxxxxxxxxxx-default-rtdb.firebaseio.com";
-const String FIREBASE_AUTH  = "xxxxxxxxxxxx";
+const char FIREBASE_HOST[]  = "xxxxxxxxxxxxxxxxxx.firebaseio.com";
+const String FIREBASE_AUTH  = "xxxxxxxxxxxxxxxxxxxxxxxxx";
 //const String FIREBASE_PATH  = "dados/coordenadas";
 const String FIREBASE_PATH  = "/";
 const int SSL_PORT          = 443;
@@ -22,16 +22,19 @@ const int SSL_PORT          = 443;
 //NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 // Your GPRS credentials
 // Leave empty, if missing user or pass
-char apn[]  = "internet";
+char apn[]  = "GPRS internet";
 char user[] = "";
 char pass[] = "";
 //NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 
+
 //NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 //GSM Module RX pin to ESP32 2
 //GSM Module TX pin to ESP32 4
-#define rxPin 26
-#define txPin 27
+//#define rxPin 26
+//#define txPin 27
+
+//pino LED embarcado no pino 13
 #define LED 13
 
 
@@ -39,8 +42,8 @@ char pass[] = "";
 #define MODEM_RST 5
 #define MODEM_PWRKEY 4
 #define MODEM_POWER_ON 23
-//#define MODEM_TX 27
-//#define MODEM_RX 26
+#define MODEM_TX 27
+#define MODEM_RX 26
 
 HardwareSerial sim800(1);
 TinyGsm modem(sim800);
@@ -68,7 +71,7 @@ void setup() {
 
   pinMode(LED, OUTPUT);
   
-    //Reseta o SIM800L
+  //Reseta o SIM800L
   pinMode(MODEM_RST, OUTPUT);
   pinMode(MODEM_PWRKEY, OUTPUT);
   pinMode(MODEM_POWER_ON, OUTPUT);
@@ -84,7 +87,7 @@ void setup() {
   Serial.begin(115200);
   Serial.println("esp32 serial initialize");
   
-  sim800.begin(115200, SERIAL_8N1, rxPin, txPin);
+  sim800.begin(115200, SERIAL_8N1, MODEM_RX, MODEM_TX);
   Serial.println("SIM800L serial initialize");
 /*
   neogps.begin(9600, SERIAL_8N1, RXD2, TXD2);
@@ -181,9 +184,11 @@ void PostToFirebase(const char* method, const String & path , const String & dat
   
   String contentType = "application/json";
   http->put(url, contentType, data);
-
+//  http->put("/.json?auth=Legd1ze7Y5xDqgZQxdN23zWPvv791FZe0MSuNv26", "application/json", "{\"lat\":41.2,\"lng\":52.1}"); // exemplo de preenchimento
+//lilygo-esp32-sim800l-default-rtdb.firebaseio.com/.json?auth=Legd1ze7Y5xDqgZQxdN23zWPvv791FZe0MSuNv26/application/json/{\"lat\":41.2,\"lng\":52.1}
+//link para navegador:lilygo-esp32-sim800l-default-rtdb.firebaseio.com/.json?=Legd1ze7Y5xDqgZQxdN23zWPvv791FZe0MSuNv26/application/json/{\"lat\":80.2,\"lng\":52.1}
   digitalWrite(LED, HIGH);
-  delay(50);
+  delay(100);
   digitalWrite(LED, LOW);
 
   
@@ -232,8 +237,8 @@ void gps_loop()
   if(true){
   newData = false;
   */
-  String latitude = "550";
-  String longitude = "44.5";
+  String latitude = "47.2";
+  String longitude = "46.4";
   //float altitude;
   //unsigned long date, time, speed, satellites;
   
@@ -262,6 +267,7 @@ void gps_loop()
   //PUT   Write or replace data to a defined path, like messages/users/user1/<data>
   //PATCH   Update some of the keys for a defined path without replacing all of the data.
   //POST  Add to a list of data in our Firebase database. Every time we send a POST request, the Firebase client generates a unique key, like messages/users/<unique-id>/<data>
+  //DELETE  Remove data from the Firebase database reference reference.
   //https://firebase.google.com/docs/database/rest/save-data
   
   PostToFirebase("PATCH", FIREBASE_PATH, gpsData, &http_client);
