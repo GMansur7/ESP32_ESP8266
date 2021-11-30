@@ -21,8 +21,8 @@
 //***********************************************************************
 
 //***********************************************************************
-const char FIREBASE_HOST[]  = "lilygo-esp32-sim800l-xxxxxxxxx.firebaseio.com";
-const String FIREBASE_AUTH  = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+const char FIREBASE_HOST[]  = "lilygo-esp32-sim800l-default-rtdb.firebaseio.com";
+const String FIREBASE_AUTH  = "Legd1ze7Y5xDqgZQxdN23zWPvv791FZe0MSuNv26";
 //const String FIREBASE_PATH  = "dados/coordenadas";//exemplo para caminhos diferentes dentro da tabela de dados do servidor Firebase
 const String FIREBASE_PATH  = "/";
 const int SSL_PORT          = 443;//Proteção e criptografia HTTPS
