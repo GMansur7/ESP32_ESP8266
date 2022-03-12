@@ -140,12 +140,12 @@ void loop() {
   //Serial.println(t); //Menor resolução e mais rápido
   Serial.println(hic); //Maior resolução e mais lento
 ////////////////////////////////////////////////////////////////////////////////////////////////
-/*  
+ 
   // put your main code here, to run repeatedly:
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   // Clear the buffer.
-  display.clearDisplay();
-*/  
+  //display.clearDisplay();
+  
   display.display();
   display.clearDisplay();
 //  delay(100);
